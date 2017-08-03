@@ -22,7 +22,7 @@ fsChain()
       chain.writeFileSync(filename, 
     }
   .then( (data) => {
-    console.log('
+    console.log(`file contents: '${data}'`);
   })
   .catch( (reason) => {
     console.log(`Had some issues here: '${reason}'`);

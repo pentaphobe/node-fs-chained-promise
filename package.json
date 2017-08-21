@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "npm unlink && npm link && nodemon lib/index.js --exec babel-node",
     "build": "babel lib -d dist",
-    "test": "npm run build && mocha --compilers js:babel-register ./test/**/*.js"
+    "testbuilder": "npm run build && mocha --compilers js:babel-register ./test/**/*.js",
+    "test": "nodemon --exec npm run testbuilder --ignore dist/"
   },
   "author": "Keilin Olsen (http://github.com/pentaphobe)",
   "license": "MIT",
@@ -16,6 +17,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.24.1",
     "chai": "^4.1.0",
-    "mocha": "^3.5.0"
+    "mocha": "^3.5.0",
+    "nodemon": "^1.11.0"
   }
 }

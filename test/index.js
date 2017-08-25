@@ -100,7 +100,58 @@ describe('Library', () => {
         .go()
     }) 
 
+    it('should support local then() leading to global then()', (done) => {
+      const values = ['hi', 'figgles', 23 * 666];
+      let gotLocal = false;
 
+      fs()
+        ._run( 'do nothing', () => values[0] )
+          .local()
+          .then( (val) => {
+            console.log('local!');
+            gotLocal = true;
+          })
+          .done()
+        ._run( 'return a value', () => values[2] )
+        .then( (val) => {
+          console.log('global!');
+          if (gotLocal) {
+            done();
+          } else {
+            done(`didn't hit local then()`);
+          }
+        })
+        .catch( (err, vals) => {
+          console.error(err, vals);
+          done('failure is failure');
+        })
+        .go()
+    }) 
+
+    it('should support local catch() leading to global catch()', (done) => {
+      const values = ['hi', 'figgles', 23 * 666];
+      let gotLocal = false;
+
+      fs()
+        ._run( 'do nothing', () => values[0] )
+        ._run( 'log something', () => global.someUnlikelyValue.Not.Really )
+          .local()
+          .catch( (err, vals) => {
+            gotLocal = true;
+          })
+          .done()
+        .then( (val) => {
+          done('success is failure');
+        })
+        .catch( (err, vals) => {
+          if (gotLocal) {
+            done();
+          } else {
+            done(`didn't hit local then()`);
+          }
+        })
+        .go()
+    }) 
   }); 
 
 });

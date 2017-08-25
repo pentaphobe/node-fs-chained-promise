@@ -108,13 +108,11 @@ describe('Library', () => {
         ._run( 'do nothing', () => values[0] )
           .local()
           .then( (val) => {
-            console.log('local!');
             gotLocal = true;
           })
           .done()
         ._run( 'return a value', () => values[2] )
         .then( (val) => {
-          console.log('global!');
           if (gotLocal) {
             done();
           } else {
@@ -162,22 +160,17 @@ describe('Library', () => {
         .readFileSync('someMadeUpFilenameWhichHopefullyDoesNotExist!!.txt', {encoding:'utf8'})
           .local()
           .then( (val) => {
-            console.error('local then');
             done('that file really should not have existed');
           })
           .catch( (err, vals) => {
-            console.log('successfully got error!');
             gotLocal = true;
           })
           .done()
         .then( (val) => {
-          console.error('global then');
           done('we should never get here');
         })
         .catch( (err, vals) => {
-          console.log('global context cleaning up...');
           if (gotLocal) {
-            console.error('global success catch');
             done();
           } else {
             done(`global fail catch`);

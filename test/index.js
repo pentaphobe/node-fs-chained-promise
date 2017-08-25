@@ -154,4 +154,36 @@ describe('Library', () => {
     }) 
   }); 
 
+  describe('basic fs replacement', () => {
+    it('should successfully wrap a failed readFileSync() call', (done) => {
+      let gotLocal = false;
+
+      fs()
+        .readFileSync('someMadeUpFilenameWhichHopefullyDoesNotExist!!.txt', {encoding:'utf8'})
+          .local()
+          .then( (val) => {
+            console.error('local then');
+            done('that file really should not have existed');
+          })
+          .catch( (err, vals) => {
+            console.log('successfully got error!');
+            gotLocal = true;
+          })
+          .done()
+        .then( (val) => {
+          console.error('global then');
+          done('we should never get here');
+        })
+        .catch( (err, vals) => {
+          console.log('global context cleaning up...');
+          if (gotLocal) {
+            console.error('global success catch');
+            done();
+          } else {
+            done(`global fail catch`);
+          }
+        })
+        .go()
+    });
+  });
 });

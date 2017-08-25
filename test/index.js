@@ -165,6 +165,8 @@ describe('Library', () => {
           .catch( (err, vals) => {
             gotLocal = true;
           })
+          // TODO: allow errors to resolve errors
+          // will require a major overhawl now we know how this works
           .done()
         .then( (val) => {
           done('we should never get here');
